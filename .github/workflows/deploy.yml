@@ -1,0 +1,50 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Clean install dependencies
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
+          npm install
+          npm install @rollup/rollup-linux-x64-gnu
+          npm install rollup
+
+      - name: Build
+        run: npm run build
+
+      - name: Prepare for deployment
+        run: |
+          touch dist/.nojekyll
+          echo "cleoinitiative.org" > dist/CNAME
+          cp public/site.webmanifest dist/
+          cp public/*.png dist/ || true
+          
+          # Debug: show contents
+          echo "Contents of dist directory:"
+          ls -la dist/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true 

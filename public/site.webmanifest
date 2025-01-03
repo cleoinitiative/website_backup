@@ -1,0 +1,28 @@
+{
+  "name": "CLEO Initiative",
+  "short_name": "CLEO",
+  "description": "Empowering seniors through technology education and digital literacy support",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "theme_color": "#0a4b78",
+  "background_color": "#001529",
+  "display": "standalone",
+  "orientation": "portrait",
+  "categories": ["education", "technology", "community"],
+  "lang": "en-US",
+  "prefer_related_applications": false
+}
