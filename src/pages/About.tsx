@@ -68,9 +68,15 @@ const timelineItems: TimelineItem[] = [
   },
   {
     year: '2023',
-    title: 'Nationwide Growth',
-    description: 'Friends and family of CLEO members began reaching out to start chapters, and thus CLEO became a nationwide effort. Today, CLEO has chapters across multiple states, serving seniors in communities throughout the country.',
+    title: 'Initial Expansion',
+    description: 'CLEO began expanding beyond its first location, with new chapters starting in Fort Myers and neighboring cities. Friends of CLEO members in other states began reaching out to start their own chapters, marking the beginning of CLEO\'s growing presence.',
     image: '/images/about/about4.jpg'
+  },
+  {
+    year: '2024',
+    title: 'Continued Growth',
+    description: 'CLEO\'s growth continues to accelerate, with chapters now spanning across multiple states. The initiative has evolved into a nationwide movement, bringing together students and seniors in communities throughout the country, fostering meaningful connections and digital literacy.',
+    image: '/images/about/about5.jpeg'
   }
 ];
 
@@ -513,8 +519,24 @@ const About: React.FC = () => {
                   left: '50%',
                   transform: 'translateX(-50%)',
                   width: 2,
-                  height: '100%',
+                  height: 'calc(100% - 40px)',  // Shortened to make room for swirl
                   background: 'rgba(255,255,255,0.2)',
+                  top: '40px',  // Moved down to make room for swirl
+                  zIndex: 0,
+                },
+                '&::after': {  // New swirl element
+                  content: '""',
+                  position: 'absolute',
+                  left: '50%',
+                  top: 0,
+                  width: '40px',  // Increased width for more substantial swirl
+                  height: '40px',
+                  background: 'rgba(255,255,255,0.2)',
+                  maskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 40 C20 40, 20 35, 20 30 S 30 25, 25 20 S 15 15, 20 10 S 30 5, 20 0' stroke='white' fill='none' stroke-width='2'/%3E%3C/svg%3E")`,
+                  WebkitMaskImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 40 C20 40, 20 35, 20 30 S 30 25, 25 20 S 15 15, 20 10 S 30 5, 20 0' stroke='white' fill='none' stroke-width='2'/%3E%3C/svg%3E")`,
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskRepeat: 'no-repeat',
+                  transform: 'translateX(-50%)',
                   zIndex: 0,
                 }
               }}
@@ -600,7 +622,8 @@ const About: React.FC = () => {
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
-                            objectPosition: index === timelineItems.length - 1 ? 'top' : 'center',
+                            objectPosition: item.image.includes('about4.jpg') ? 'center -0%' : 'center',
+                            transform: item.image.includes('about5.jpeg') ? 'scale(1.4)' : 'none',  // 20% zoom for about5
                           }}
                         />
                       </Box>
@@ -611,7 +634,12 @@ const About: React.FC = () => {
                           variant="h4" 
                           gutterBottom 
                           color="primary.light"
-                          sx={{ fontSize: { xs: '1.75rem', md: '2.125rem' } }}
+                          sx={{ 
+                            fontSize: { xs: '1.75rem', md: '2.125rem' },
+                            background: 'linear-gradient(45deg, #64b5f6 30%, #0a4b78 90%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                          }}
                         >
                           {item.year}
                         </Typography>
@@ -637,6 +665,108 @@ const About: React.FC = () => {
                   </Box>
                 </Box>
               ))}
+            </Box>
+
+            {/* Timeline Endpoint - 2025 Call to Action */}
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mt: { xs: 8, md: 12 },
+                mb: { xs: 8, md: 12 },
+                position: 'relative',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: '-100px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: 2,
+                  height: '100px',
+                  background: 'rgba(255,255,255,0.2)',
+                }
+              }}
+            >
+              <Box
+                sx={{
+                  width: 20,
+                  height: 20,
+                  borderRadius: '50%',
+                  bgcolor: 'primary.light',
+                  border: '4px solid white',
+                  mb: 4,
+                }}
+              />
+              <Paper
+                sx={{
+                  p: { xs: 4, md: 6 },
+                  bgcolor: 'rgba(255,255,255,0.1)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  borderRadius: '20px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+                  maxWidth: '600px',
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  transition: 'transform 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                  }
+                }}
+              >
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontWeight: 700,
+                    background: 'linear-gradient(45deg, #ffffff 30%, #64b5f6 90%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    mb: 2,
+                  }}
+                >
+                  2025
+                </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    textAlign: 'center',
+                    mb: 4,
+                    opacity: 0.9,
+                  }}
+                >
+                  Let's see how much CLEO can acomplish in 2025, together
+                </Typography>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    component={Link}
+                    to="/get-started"
+                    variant="contained"
+                    size="large"
+                    sx={{
+                      px: 6,
+                      py: 2,
+                      borderRadius: '50px',
+                      fontSize: '1.1rem',
+                      background: 'rgba(255,255,255,0.2)',
+                      backdropFilter: 'blur(10px)',
+                      '&:hover': {
+                        background: 'rgba(255,255,255,0.3)',
+                      }
+                    }}
+                  >
+                    Join Now
+                  </Button>
+                </motion.div>
+              </Paper>
             </Box>
 
             {/* Chapters Section */}
