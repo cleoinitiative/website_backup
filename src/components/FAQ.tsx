@@ -54,17 +54,17 @@ const faqCategories: FAQCategory[] = [
         question: "Is there a cost to start or join a CLEO chapter?",
         answer: (
           <>
-            There is no cost to start a CLEO chapter. However, to keep CLEO
-            running we ask for a $10 membership fee per member. In return, we
-            provide free resources and support for your chapter year-round. Some
-            chapters choose to fundraise for additional activities or equipment.{" "}
+            There is no cost to start a CLEO chapter for either the school and the seniors. CLEO chapters are free to start and run.
+            As an organization, we run on donations and sponsorships. If you are interested in sponsoring CLEO, please
+            reach out to us on our{" "}
             <Link
               to="/contact"
               style={{ color: "#64b5f6", textDecoration: "underline" }}
             >
-              Contact
+              contact page
             </Link>{" "}
-            us to learn more.
+            to learn more. If you want to donate, please click the button in the top right corner of the page if you are on desktop
+            or the button in the dropdown menu if you are on mobile.
           </>
         ),
       },
