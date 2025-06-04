@@ -40,9 +40,21 @@ const founders: Founder[] = [
 ];
 
 const stats = [
-  { number: '1500+', label: 'Seniors Helped', icon: <GroupsIcon sx={{ fontSize: 40 }} /> },
-  { number: '35+', label: 'School Chapters', icon: <SchoolIcon sx={{ fontSize: 40 }} /> },
-  { number: '15', label: 'States Reached', icon: <PublicIcon sx={{ fontSize: 40 }} /> },
+  {
+    number: "3000+",
+    label: "Seniors Helped",
+    icon: <GroupsIcon sx={{ fontSize: 40 }} />,
+  },
+  {
+    number: "50+",
+    label: "School Chapters",
+    icon: <SchoolIcon sx={{ fontSize: 40 }} />,
+  },
+  {
+    number: "20",
+    label: "States Reached",
+    icon: <PublicIcon sx={{ fontSize: 40 }} />,
+  },
 ];
 
 // Timeline data
