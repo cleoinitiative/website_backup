@@ -1,0 +1,7 @@
+venv/
+corpus/
+scraper/
+__pycache__/
+*.pyc
+*.log
+.env
