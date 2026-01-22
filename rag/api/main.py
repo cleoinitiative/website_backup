@@ -69,15 +69,9 @@ class ChatResponse(BaseModel):
     sources: list[str] = []
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Initialize RAG pipeline on startup."""
-    global pipeline
-    
-    logger.info("Initializing RAG pipeline...")
-    
-    # Configure pipeline for production
-    config = PipelineConfig(
+def get_pipeline_config() -> PipelineConfig:
+    """Get pipeline configuration."""
+    return PipelineConfig(
         # Database path - use environment variable or default
         db_path=os.getenv("RAG_DB_PATH", "./rag_db"),
         table_name="tech_help",
@@ -97,20 +91,32 @@ async def lifespan(app: FastAPI):
         mmr_lambda=0.7,
         initial_k=15,
     )
-    
-    pipeline = RAGPipeline(config)
-    
-    # Check if we have documents indexed
-    try:
-        doc_count = pipeline.vector_store.count()
-        logger.info(f"RAG pipeline ready with {doc_count} chunks indexed")
-    except Exception as e:
-        logger.warning(f"Vector store not yet initialized: {e}")
-        logger.info("Run the ingestion script to populate the knowledge base")
+
+
+def init_pipeline():
+    """Initialize the pipeline (called lazily on first request)."""
+    global pipeline
+    if pipeline is None:
+        logger.info("Loading RAG pipeline (this may take a minute)...")
+        pipeline = RAGPipeline(get_pipeline_config())
+        try:
+            doc_count = pipeline.vector_store.count()
+            logger.info(f"RAG pipeline ready with {doc_count} chunks indexed")
+        except Exception as e:
+            logger.warning(f"Vector store check failed: {e}")
+    return pipeline
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """App lifespan - pipeline loads lazily on first request."""
+    logger.info("CLEO Chatbot API starting...")
+    logger.info("Pipeline will load on first request")
     
     yield
     
-    logger.info("Shutting down RAG pipeline...")
+    logger.info("Shutting down...")
+    global pipeline
     if pipeline:
         pipeline.shutdown()
 
@@ -172,7 +178,7 @@ async def chat(request: ChatRequest):
     Retrieves relevant context from the knowledge base and generates
     a friendly, senior-appropriate response.
     """
-    global pipeline
+    pipeline = init_pipeline()
     
     if not pipeline:
         raise HTTPException(status_code=503, detail="Service not ready")
@@ -210,7 +216,7 @@ async def chat(request: ChatRequest):
 
 async def stream_response(message: str):
     """Stream chat response chunks."""
-    global pipeline
+    pipeline = init_pipeline()
     
     try:
         async for chunk in pipeline.ask_stream_async(
@@ -229,7 +235,7 @@ async def stream_response(message: str):
 @app.post("/chat/stream")
 async def chat_stream(request: ChatRequest):
     """Streaming chat endpoint."""
-    global pipeline
+    pipeline = init_pipeline()
     
     if not pipeline:
         raise HTTPException(status_code=503, detail="Service not ready")
