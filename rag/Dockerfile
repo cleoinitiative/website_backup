@@ -21,8 +21,8 @@ COPY . .
 # Run ingestion to populate vector store (optional - can be run separately)
 # RUN python ingest.py
 
-# Expose port
+# Expose port (Railway provides PORT env var)
 EXPOSE 8000
 
-# Start the application
-CMD ["python", "-m", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start the application - use shell form to expand $PORT
+CMD python -m uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}
