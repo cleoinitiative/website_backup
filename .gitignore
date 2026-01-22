@@ -1,1 +1,13 @@
 node_modules
+dist
+.env
+.env.local
+
+# Python
+rag/venv/
+rag/__pycache__/
+rag/**/__pycache__/
+rag/*.pyc
+rag/*.log
+*.pyc
+__pycache__/

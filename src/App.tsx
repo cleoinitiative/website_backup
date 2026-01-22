@@ -12,6 +12,7 @@ import emailjs from '@emailjs/browser';
 import GetStarted from './pages/GetStarted';
 import Testimonials from './pages/Testimonials';
 import FAQ from './components/FAQ';
+import { Chatbot } from './components/Chatbot';
 import { useEffect } from 'react';
 
 declare module '@mui/material/styles' {
@@ -119,6 +120,7 @@ const App: React.FC = () => {
           <Route path="/donate" element={<Home />} />
         </Routes>
       </AnimatePresence>
+      <Chatbot />
     </ThemeProvider>
   );
 };
