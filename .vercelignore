@@ -1,4 +1,13 @@
+# Backend (not needed for frontend)
 rag/
-.git/
+rag/**
+
+# Build outputs (Vercel rebuilds)
+dist/
+
+# Dependencies (Vercel reinstalls)
 node_modules/
+
+# Other
+.git/
 *.md

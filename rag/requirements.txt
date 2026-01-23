@@ -1,5 +1,5 @@
-# RAG Pipeline Dependencies
-# ========================
+# RAG Pipeline Dependencies (Lightweight - uses OpenAI embeddings)
+# ================================================================
 
 # API Framework
 fastapi>=0.109.0
@@ -10,11 +10,7 @@ pydantic>=2.5.0
 lancedb>=0.4.0
 pyarrow>=14.0.0
 
-# Embeddings
-sentence-transformers>=2.2.2
-torch>=2.0.0
-
-# LLM
+# LLM & Embeddings (OpenAI API - no heavy local models!)
 openai>=1.10.0
 
 # Document Parsing
@@ -25,11 +21,13 @@ lxml>=5.0.0
 # Chunking/Tokenization  
 tiktoken>=0.5.0
 
-# Reranking
-transformers>=4.36.0
-
 # Utilities
 python-dotenv>=1.0.0
 numpy>=1.24.0
-pandas>=2.0.0
-certifi>=2023.0.0
+tenacity>=8.2.0
+
+# Optional: Local embeddings (adds ~800MB RAM)
+# Uncomment if you want to use local models instead of OpenAI
+# sentence-transformers>=2.2.2
+# torch>=2.0.0
+# transformers>=4.36.0

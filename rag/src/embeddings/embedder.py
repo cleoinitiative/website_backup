@@ -1,4 +1,4 @@
-"""Embedding generation using Sentence Transformers."""
+"""Embedding generation using Sentence Transformers (optional - for local embeddings)."""
 
 from dataclasses import dataclass, field
 from functools import lru_cache
@@ -9,7 +9,14 @@ import logging
 import time
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
+
+# Sentence Transformers is optional (heavy dependency)
+try:
+    from sentence_transformers import SentenceTransformer
+    SENTENCE_TRANSFORMERS_AVAILABLE = True
+except ImportError:
+    SENTENCE_TRANSFORMERS_AVAILABLE = False
+    SentenceTransformer = None
 
 logger = logging.getLogger(__name__)
 
@@ -115,6 +122,13 @@ class Embedder:
     """
     
     def __init__(self, config: EmbeddingConfig | None = None):
+        if not SENTENCE_TRANSFORMERS_AVAILABLE:
+            raise ImportError(
+                "sentence-transformers is not installed. "
+                "Install with: pip install sentence-transformers torch\n"
+                "Or use OpenAIEmbedder instead (recommended - much lower RAM usage)."
+            )
+        
         self.config = config or EmbeddingConfig()
         self.model = SentenceTransformer(
             self.config.model_name,

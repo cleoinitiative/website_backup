@@ -11,3 +11,4 @@ rag/*.pyc
 rag/*.log
 *.pyc
 __pycache__/
+.vercel

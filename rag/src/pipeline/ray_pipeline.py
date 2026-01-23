@@ -23,7 +23,7 @@ except ImportError:
 
 from ..parsers import parse_file, get_supported_extensions, ParsedDocument
 from ..chunking import TextChunker, ChunkingConfig, Chunk
-from ..embeddings import Embedder, EmbeddingConfig, EmbeddedChunk
+from ..embeddings import Embedder, EmbeddingConfig, EmbeddedChunk, OpenAIEmbedder, OpenAIEmbeddingConfig
 from ..storage import VectorStore, VectorStoreConfig
 
 
@@ -53,8 +53,12 @@ class PipelineConfig:
     chunk_overlap: int = 50
     min_chunk_size: int = 100
     
-    # Embeddings (sentence-transformers) 
-    # BGE-base: high quality (MTEB 0.63), 768 dimensions
+    # Embeddings
+    # Set use_openai_embeddings=True for low RAM usage (recommended for production)
+    use_openai_embeddings: bool = True  # Use OpenAI API instead of local model
+    openai_embedding_model: str = "text-embedding-3-small"  # OpenAI model
+    
+    # Local embeddings (only used if use_openai_embeddings=False)
     embedding_model: str = "BAAI/bge-base-en-v1.5"
     embedding_batch_size: int = 32
     embedding_device: str = "cpu"  # "cpu", "cuda", "mps"
@@ -120,14 +124,22 @@ class RAGPipeline:
         self._reranker = None
     
     @property
-    def embedder(self) -> Embedder:
-        """Lazy-initialize embedder."""
+    def embedder(self):
+        """Lazy-initialize embedder (OpenAI or local)."""
         if self._embedder is None:
-            self._embedder = Embedder(EmbeddingConfig(
-                model_name=self.config.embedding_model,
-                batch_size=self.config.embedding_batch_size,
-                device=self.config.embedding_device,
-            ))
+            if self.config.use_openai_embeddings:
+                logger.info(f"Using OpenAI embeddings: {self.config.openai_embedding_model}")
+                self._embedder = OpenAIEmbedder(OpenAIEmbeddingConfig(
+                    model_name=self.config.openai_embedding_model,
+                    batch_size=self.config.embedding_batch_size,
+                ))
+            else:
+                logger.info(f"Using local embeddings: {self.config.embedding_model}")
+                self._embedder = Embedder(EmbeddingConfig(
+                    model_name=self.config.embedding_model,
+                    batch_size=self.config.embedding_batch_size,
+                    device=self.config.embedding_device,
+                ))
         return self._embedder
     
     @property
