@@ -124,6 +124,14 @@ const Chatbot: React.FC = () => {
     sendMessage(inputValue);
   };
 
+  // Handle keyboard shortcuts (Enter to send, Shift+Enter for new line)
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(inputValue);
+    }
+  };
+
   // Handle suggested question click
   const handleSuggestedQuestion = (question: string) => {
     sendMessage(question);
@@ -389,6 +397,7 @@ const Chatbot: React.FC = () => {
                   placeholder="Type your question here..."
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyDown}
                   disabled={isLoading}
                   variant="outlined"
                   size="medium"
@@ -398,12 +407,20 @@ const Chatbot: React.FC = () => {
                     '& .MuiOutlinedInput-root': {
                       borderRadius: 3,
                       fontSize: '1rem',
+                      bgcolor: 'white',
                       '&:hover fieldset': {
                         borderColor: '#0a4b78',
                       },
                       '&.Mui-focused fieldset': {
                         borderColor: '#0a4b78',
                       },
+                    },
+                    '& .MuiInputBase-input': {
+                      color: '#1e293b',
+                    },
+                    '& .MuiInputBase-input::placeholder': {
+                      color: '#94a3b8',
+                      opacity: 1,
                     },
                   }}
                   inputProps={{
