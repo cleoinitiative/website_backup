@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Box,
   Paper,
@@ -21,6 +21,7 @@ import {
   QuestionAnswer as ChatIcon,
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 
 // Message type definition
 interface Message {
@@ -58,10 +59,10 @@ const Chatbot: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom when new messages arrive
-  useEffect(() => {
+  // Scroll to bottom (called manually on user message submit)
+  const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  };
 
   // Send message to the API
   const sendMessage = async (text: string) => {
@@ -77,6 +78,9 @@ const Chatbot: React.FC = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
+    
+    // Scroll to bottom when user submits a message
+    setTimeout(() => scrollToBottom(), 100);
 
     try {
       const response = await fetch(`${API_URL}/chat`, {
@@ -277,16 +281,40 @@ const Chatbot: React.FC = () => {
                         borderTopLeftRadius: message.role === 'user' ? 16 : 0,
                       }}
                     >
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          fontSize: '1rem',
-                          lineHeight: 1.6,
-                          whiteSpace: 'pre-wrap',
-                        }}
-                      >
-                        {message.content}
-                      </Typography>
+                      {message.role === 'user' ? (
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            fontSize: '1rem',
+                            lineHeight: 1.6,
+                            whiteSpace: 'pre-wrap',
+                          }}
+                        >
+                          {message.content}
+                        </Typography>
+                      ) : (
+                        <Box
+                          sx={{
+                            fontSize: '1rem',
+                            lineHeight: 1.6,
+                            '& p': { m: 0, mb: 1, '&:last-child': { mb: 0 } },
+                            '& ul, & ol': { m: 0, pl: 2.5, mb: 1 },
+                            '& li': { mb: 0.5 },
+                            '& strong': { fontWeight: 600 },
+                            '& code': {
+                              bgcolor: 'rgba(0,0,0,0.08)',
+                              px: 0.5,
+                              py: 0.25,
+                              borderRadius: 0.5,
+                              fontFamily: 'monospace',
+                              fontSize: '0.9em',
+                            },
+                            '& a': { color: '#0a4b78', textDecoration: 'underline' },
+                          }}
+                        >
+                          <ReactMarkdown>{message.content}</ReactMarkdown>
+                        </Box>
+                      )}
                     </Paper>
                   </Box>
                 ))}
