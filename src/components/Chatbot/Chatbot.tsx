@@ -30,12 +30,12 @@ interface Message {
   timestamp: Date;
 }
 
-// Suggested questions for seniors
+// Suggested questions - tech help and CLEO info
 const SUGGESTED_QUESTIONS = [
+  "What is CLEO?",
+  "How do I start a chapter?",
   "How do I make a video call?",
-  "How do I send a text message?",
-  "How do I connect to Wi-Fi?",
-  "Is this email safe?",
+  "How do I stay safe online?",
 ];
 
 // API URL - update this when deploying
