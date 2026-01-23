@@ -88,8 +88,8 @@ def get_pipeline_config() -> PipelineConfig:
         llm_temperature=0.3,  # Slightly higher for warmth
         llm_max_tokens=1024,
         
-        # Retrieval settings
-        use_reranking=True,
+        # Retrieval settings (reranking disabled - requires heavy local models)
+        use_reranking=False,
         use_mmr=True,
         mmr_lambda=0.7,
         initial_k=15,
