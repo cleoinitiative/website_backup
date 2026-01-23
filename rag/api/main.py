@@ -131,14 +131,8 @@ app = FastAPI(
 # Configure CORS for frontend access
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",  # Vite dev
-        "http://localhost:3000",  # Alternative dev
-        "https://cleoinitiative.org",  # Production
-        "https://www.cleoinitiative.org",  # Production www
-        os.getenv("FRONTEND_URL", ""),  # Custom frontend URL
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],  # Allow all origins for now
+    allow_credentials=False,  # Must be False when using "*"
     allow_methods=["*"],
     allow_headers=["*"],
 )
